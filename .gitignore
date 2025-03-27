@@ -1,0 +1,73 @@
+﻿# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# DNX
+project.lock.json
+artifacts/
+
+# .NET Core
+project.assets.json
+project.fragment.lock.json
+project.userprefs.json
+
+# Visual Studio
+.vs/
+Generated_Code/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.nuspec
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Logs
+*.log
+
+# DotCover
+*.dotCover
+
+# Coverage tools
+coverage*.json
+coverage*.xml
+coverage*.info
+coverage/
+lcov-report/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# dotenv / config
+.env
+*.secret.json
+
+# Global
