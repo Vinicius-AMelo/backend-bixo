@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace bixoApi.Models.Resultados;
+namespace BichoApi.Domain.Entities.Results;
 
 public class ResultsEntity
 {
-    [Key]
-    public int Id { get; set; }
-    
+    [Key] public int Id { get; init; }
 }

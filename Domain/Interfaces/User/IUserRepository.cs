@@ -1,7 +1,6 @@
-﻿using bixoApi.Models.User;
-using Microsoft.AspNetCore.Mvc;
+﻿using BichoApi.Domain.Entities.User;
 
-namespace bixoApi.Repositories.User;
+namespace BichoApi.Domain.Interfaces.User;
 
 public interface IUserRepository
 {
@@ -10,6 +9,5 @@ public interface IUserRepository
     Task<UserEntity?> GetUserByEmail(string email);
     Task<UserEntity> CreateUser(UserEntity user);
     UserEntity? UpdateUser(UserEntity user, int id);
-    String? DeleteUser(int id);
-    
+    string? DeleteUser(int id);
 }

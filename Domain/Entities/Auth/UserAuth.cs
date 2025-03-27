@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using bixoApi.Models.User;
+using BichoApi.Domain.Entities.User;
 
-namespace bixoApi.Models.Auth;
+namespace BichoApi.Domain.Entities.Auth;
 
 [Table("Auth")]
 public class UserAuth
 {
-    [Key, ForeignKey(nameof(UserEntity))]
-    public int UserId { get; set; }
-    
-    [Required, StringLength(24, MinimumLength = 8)]
-    public required string Password { get; set; }   
-    
-    public required UserEntity User { get; set; }
+    [Key] [ForeignKey(nameof(UserEntity))] public int UserId { get; init; }
+
+    [Required]
+    [StringLength(24, MinimumLength = 8)]
+    public required string Password { get; init; }
+
+    public required UserEntity User { get; init; }
 }

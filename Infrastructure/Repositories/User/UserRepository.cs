@@ -1,56 +1,48 @@
-﻿using bixoApi.Context;
-using bixoApi.Models.User;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using BichoApi.Domain.Entities.User;
+using BichoApi.Domain.Interfaces.User;
+using BichoApi.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace bixoApi.Repositories.User;
+namespace BichoApi.Infrastructure.Repositories.User;
 
-public class UserRepository : IUserRepository
+public class UserRepository(ApiContext context) : IUserRepository
 {
-    private readonly ApiContext _context;
-
-    public UserRepository(ApiContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IEnumerable<UserEntity>> GetAllUsers()
     {
-        return await _context.Set<UserEntity>().AsNoTracking().ToListAsync();
+        return await context.Set<UserEntity>().AsNoTracking().ToListAsync();
     }
 
     public async Task<UserEntity?> GetUserById(int id)
     {
-        return await _context.Set<UserEntity>().FindAsync(id);
+        return await context.Set<UserEntity>().FindAsync(id);
     }
-    
+
     public async Task<UserEntity?> GetUserByEmail(string email)
     {
-        return await _context.Set<UserEntity>().FirstOrDefaultAsync(u => u.Email == email);
+        return await context.Set<UserEntity>().FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<UserEntity> CreateUser(UserEntity user)
     {
-        await _context.Set<UserEntity>().AddAsync(user);
-        await _context.SaveChangesAsync();
+        await context.Set<UserEntity>().AddAsync(user);
+        await context.SaveChangesAsync();
         return user;
     }
 
     public UserEntity? UpdateUser(UserEntity newUser, int id)
     {
-        UserEntity oldUser = _context.Set<UserEntity>().Find(id);
+        var oldUser = context.Set<UserEntity>().Find(id);
         if (oldUser == null) return null;
-        _context.Entry(oldUser).CurrentValues.SetValues(newUser);
-        _context.SaveChanges();
+        context.Entry(oldUser).CurrentValues.SetValues(newUser);
+        context.SaveChanges();
         return newUser;
     }
 
-    public String? DeleteUser(int id)
+    public string? DeleteUser(int id)
     {
-        UserEntity oldUser = _context.Set<UserEntity>().Find(id);
+        var oldUser = context.Set<UserEntity>().Find(id);
         if (oldUser == null) return null;
-        _context.Set<UserEntity>().Remove(oldUser);
+        context.Set<UserEntity>().Remove(oldUser);
         return "User removed!";
     }
 }

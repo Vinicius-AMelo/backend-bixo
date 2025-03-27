@@ -1,7 +1,7 @@
-using bixoApi.Context;
-using bixoApi.Models.User;
-using bixoApi.Repositories.User;
-using bixoApi.Services.User;
+using BichoApi.Application.Services.User;
+using BichoApi.Domain.Interfaces.User;
+using BichoApi.Infrastructure.Data.Context;
+using BichoApi.Infrastructure.Repositories.User;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

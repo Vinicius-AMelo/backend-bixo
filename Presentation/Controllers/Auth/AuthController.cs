@@ -1,7 +1,7 @@
-﻿// using bixoApi.Models.User;
+﻿// using BichoApi.Models.User;
 // using Microsoft.AspNetCore.Mvc;
 //
-// namespace bixoApi.Controllers.Auth;
+// namespace BichoApi.Controllers.Auth;
 //
 // [Microsoft.AspNetCore.Components.Route("api/auth")]
 // public class AuthController
@@ -13,3 +13,4 @@
 //     //     
 //     // }
 // }
+

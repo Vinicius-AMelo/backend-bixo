@@ -1,7 +1,6 @@
-﻿using bixoApi.Models.User;
-using Microsoft.AspNetCore.Mvc;
+﻿using BichoApi.Domain.Entities.User;
 
-namespace bixoApi.Services.User;
+namespace BichoApi.Domain.Interfaces.User;
 
 public interface IUserService
 {

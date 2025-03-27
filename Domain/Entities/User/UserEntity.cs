@@ -1,22 +1,17 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using bixoApi.Models.Auth;
+using BichoApi.Domain.Entities.Auth;
 
-namespace bixoApi.Models.User
+namespace BichoApi.Domain.Entities.User;
+
+[Table("Users")]
+public class UserEntity
 {
-    [Table("Users")]
-    public class UserEntity
-    {
-        [Key]
-        public int Id { get; set; }
-        
-        [Required, StringLength(50)]
-        public required string Name { get; set; }
-        
-        [Required, StringLength(50)]
-        public required string Email { get; set; }
-        
-        public required UserAuth UserAuth { get; set; }
-    }
+    [Key] public int Id { get; init; }
+
+    [Required] [StringLength(50)] public required string Name { get; init; }
+
+    [Required] [StringLength(50)] public required string Email { get; init; }
+
+    public required UserAuth UserAuth { get; init; }
 }
