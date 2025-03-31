@@ -13,10 +13,10 @@ public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(option
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserEntity>()
-            .HasOne(u => u.UserAuth)
-            .WithOne(a => a.User)
-            .HasForeignKey<UserAuth>(a => a.UserId)
+        modelBuilder.Entity<UserAuth>()
+            .HasOne(ua => ua.User)
+            .WithOne()
+            .HasForeignKey<UserAuth>(ua => ua.UserId)
             .IsRequired();
 
         base.OnModelCreating(modelBuilder);

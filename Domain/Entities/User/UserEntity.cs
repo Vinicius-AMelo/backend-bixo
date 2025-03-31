@@ -12,6 +12,4 @@ public class UserEntity
     [Required] [StringLength(50)] public required string Name { get; init; }
 
     [Required] [StringLength(50)] public required string Email { get; init; }
-
-    public required UserAuth UserAuth { get; init; }
 }
