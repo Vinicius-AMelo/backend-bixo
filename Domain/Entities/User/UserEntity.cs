@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BichoApi.Domain.Entities.Auth;
 
 namespace BichoApi.Domain.Entities.User;
 

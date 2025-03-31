@@ -1,8 +1,6 @@
-﻿using BichoApi.Domain.Entities.Auth;
-using BichoApi.Domain.Entities.User;
+﻿using BichoApi.Domain.Entities.User;
 using BichoApi.Domain.Interfaces.User;
 using BichoApi.Infrastructure.Data.Context;
-using BichoApi.Presentation.DTO.Auth;
 using Microsoft.EntityFrameworkCore;
 
 namespace BichoApi.Infrastructure.Repositories.User;
@@ -24,12 +22,6 @@ public class UserRepository(ApiContext context) : IUserRepository
         return await context.Set<UserEntity>().FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<UserAuth> CreateUser(UserAuth userAuth)
-    {
-        await context.Set<UserAuth>().AddAsync(userAuth);
-        await context.SaveChangesAsync();
-        return userAuth;
-    }
 
     public UserEntity? UpdateUser(UserEntity newUser, int id)
     {

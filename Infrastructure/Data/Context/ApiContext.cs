@@ -8,15 +8,15 @@ namespace BichoApi.Infrastructure.Data.Context;
 public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(options)
 {
     public DbSet<UserEntity> User { get; set; }
-    public DbSet<UserAuth> UserAuth { get; set; }
+    public DbSet<AuthEntity> UserAuth { get; set; }
     public DbSet<ResultsEntity> Results { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserAuth>()
+        modelBuilder.Entity<AuthEntity>()
             .HasOne(ua => ua.User)
             .WithOne()
-            .HasForeignKey<UserAuth>(ua => ua.UserId)
+            .HasForeignKey<AuthEntity>(ua => ua.UserId)
             .IsRequired();
 
         base.OnModelCreating(modelBuilder);

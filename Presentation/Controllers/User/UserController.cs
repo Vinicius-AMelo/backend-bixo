@@ -22,12 +22,6 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(user);
     }
 
-    // [HttpPost]
-    // public async Task<ActionResult> Post([FromBody] UserEntity user)
-    // {
-    //     return Ok(await userService.CreateUser(user));
-    // }
-
     [HttpPut("{id:int}")]
     public void Put(int id, [FromBody] string value)
     {

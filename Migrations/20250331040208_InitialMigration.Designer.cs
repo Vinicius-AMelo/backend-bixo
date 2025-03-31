@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BichoApi.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20250331025717_InitialMigration")]
+    [Migration("20250331040208_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace BichoApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BichoApi.Domain.Entities.Auth.UserAuth", b =>
+            modelBuilder.Entity("BichoApi.Domain.Entities.Auth.AuthEntity", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -75,11 +75,11 @@ namespace BichoApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BichoApi.Domain.Entities.Auth.UserAuth", b =>
+            modelBuilder.Entity("BichoApi.Domain.Entities.Auth.AuthEntity", b =>
                 {
                     b.HasOne("BichoApi.Domain.Entities.User.UserEntity", "User")
                         .WithOne()
-                        .HasForeignKey("BichoApi.Domain.Entities.Auth.UserAuth", "UserId")
+                        .HasForeignKey("BichoApi.Domain.Entities.Auth.AuthEntity", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

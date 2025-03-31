@@ -1,22 +1,27 @@
-﻿using BichoApi.Domain.Entities.Auth;
-using BichoApi.Domain.Entities.User;
-using BichoApi.Domain.Interfaces.User;
+﻿using BichoApi.Domain.Entities.User;
+using BichoApi.Domain.Interfaces.Auth;
 using BichoApi.Presentation.DTO.Auth;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BichoApi.Presentation.Controllers.Auth;
 
 [Route("api/auth")]
 [ApiController]
-public class AuthController(IUserService userService) : ControllerBase
+public class AuthController(IAuthService authService) : ControllerBase
 {
-
-    [HttpPost("/register")]
-    public async Task<ActionResult> Register([FromBody] AuthDto authDto)
+    [HttpPost("register")]
+    public async Task<ActionResult<UserEntity>> Register([FromBody] RegisterDto registerDto)
     {
-        await userService.CreateUser(authDto);
-        return Ok("user");
+        var user = await authService.CreateUser(registerDto);
+        return Created("User created successfully!", user);
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<ResponseLoginDto>> Login([FromBody] LoginDto loginDto)
+    {
+        var validation = await authService.GetUserByEmail(loginDto);
+        if (validation == null) return Unauthorized();
+        const string token = "das8da97d89a7sdaa";
+        return Ok(new ResponseLoginDto { Token = token });
     }
 }
-
