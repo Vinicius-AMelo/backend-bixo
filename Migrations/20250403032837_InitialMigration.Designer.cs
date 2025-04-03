@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BichoApi.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20250403023711_UserRole")]
-    partial class UserRole
+    [Migration("20250403032837_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

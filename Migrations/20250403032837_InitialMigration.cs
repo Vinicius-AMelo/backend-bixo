@@ -5,7 +5,7 @@
 namespace BichoApi.Migrations
 {
     /// <inheritdoc />
-    public partial class UserRole : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -20,7 +20,7 @@ public class AuthRepository(ApiContext context) : IAuthRepository
             .Include(a => a.User)
             .Select(a => new { a.User.Id, a.User.Email, a.Password, a.User.Role })
             .FirstOrDefaultAsync(u => u.Email == email);
-
+        if (loginData == null) return null;
         return new RepositoryClaims(loginData.Id, loginData.Email, loginData.Role, loginData.Password);
     }
 }
