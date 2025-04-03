@@ -21,7 +21,6 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         var validation = await authService.GetUserByEmail(loginDto);
         if (validation == null) return Unauthorized();
-        const string token = "das8da97d89a7sdaa";
-        return Ok(new ResponseLoginDto { Token = token });
+        return Ok(new ResponseLoginDto { Token = validation });
     }
 }

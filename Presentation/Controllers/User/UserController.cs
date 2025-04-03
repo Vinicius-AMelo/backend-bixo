@@ -1,5 +1,6 @@
 ﻿using BichoApi.Domain.Entities.User;
 using BichoApi.Domain.Interfaces.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BichoApi.Presentation.Controllers.User;
@@ -9,6 +10,7 @@ namespace BichoApi.Presentation.Controllers.User;
 public class UserController(IUserService userService) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Roles = "user")]
     public async Task<ActionResult<IEnumerable<UserEntity>>> GetAllUsers()
     {
         return Ok(await userService.GetAllUsers());

@@ -6,5 +6,5 @@ namespace BichoApi.Domain.Interfaces.Auth;
 public interface IAuthRepository
 {
     Task<AuthEntity> CreateUser(AuthEntity auth);
-    Task<string?> GetUserByEmail(string email);
+    Task<RepositoryClaims?> GetUserByEmail(string email);
 }

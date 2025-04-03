@@ -14,13 +14,13 @@ public class AuthRepository(ApiContext context) : IAuthRepository
         return auth;
     }
 
-    public async Task<string?> GetUserByEmail(string email)
+    public async Task<RepositoryClaims?> GetUserByEmail(string email)
     {
         var loginData = await context.Set<AuthEntity>()
             .Include(a => a.User)
-            .Select(a => new { a.User.Email, a.Password })
+            .Select(a => new { a.User.Id, a.User.Email, a.Password, a.User.Role })
             .FirstOrDefaultAsync(u => u.Email == email);
 
-        return loginData?.Password;
+        return new RepositoryClaims(loginData.Id, loginData.Email, loginData.Role, loginData.Password);
     }
 }

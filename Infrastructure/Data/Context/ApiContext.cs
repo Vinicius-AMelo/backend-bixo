@@ -9,7 +9,7 @@ public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(option
 {
     public DbSet<UserEntity> User { get; set; }
     public DbSet<AuthEntity> UserAuth { get; set; }
-    public DbSet<ResultsEntity> Results { get; set; }
+    // public DbSet<ResultsEntity> Results { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

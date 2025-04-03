@@ -7,8 +7,8 @@ namespace BichoApi.Domain.Entities.User;
 public class UserEntity
 {
     [Key] public int Id { get; init; }
-
     [Required] [StringLength(50)] public required string Name { get; init; }
-
     [Required] [StringLength(50)] public required string Email { get; init; }
+    [Required] [StringLength(50)] public required string Role { get; init; }
+    
 }
