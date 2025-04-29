@@ -19,7 +19,7 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<UserEntity?>> Get(int id)
     {
-        var user = await userService.GetUserById(id);
+        UserEntity? user = await userService.GetUserById(id);
         if (user == null) return NotFound("User not found");
         return Ok(user);
     }

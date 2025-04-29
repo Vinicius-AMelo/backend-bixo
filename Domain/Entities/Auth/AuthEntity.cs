@@ -9,9 +9,7 @@ public class AuthEntity
 {
     [Key] [ForeignKey(nameof(UserEntity))] public int UserId { get; init; }
 
-    [Required]
-    [StringLength(100)]
-    public required string Password { get; init; }
+    [Required] [StringLength(100)] public required string Password { get; init; }
 
     public required UserEntity User { get; init; }
 }

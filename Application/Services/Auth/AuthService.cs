@@ -9,10 +9,10 @@ namespace BichoApi.Application.Services.Auth;
 public class AuthService(IAuthRepository authRepository, IConfiguration config) : IAuthService
 {
     public async Task<UserEntity> CreateUser(RegisterDto registerDto)
-    {   
-        var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
-        var user = new UserEntity { Email = registerDto.Email, Name = registerDto.Name, Role = "user"};
-        var auth = new AuthEntity { Password = passwordHash, User = user };
+    {
+        string? passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
+        UserEntity user = new() { Email = registerDto.Email, Name = registerDto.Name, Role = "user" };
+        AuthEntity auth = new() { Password = passwordHash, User = user };
 
         await authRepository.CreateUser(auth);
         return user;
@@ -20,12 +20,12 @@ public class AuthService(IAuthRepository authRepository, IConfiguration config) 
 
     public async Task<string?> GetUserByEmail(LoginDto loginDto)
     {
-        var secretKey = config["JWTKey"];
-        var user = await authRepository.GetUserByEmail(loginDto.Email);
+        string? secretKey = config["JWTKey"];
+        RepositoryClaims? user = await authRepository.GetUserByEmail(loginDto.Email);
         if (user == null) return null;
-        var matchPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+        bool matchPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
         if (!matchPassword) return null;
-        var token = JwtHelper.GerarToken(new TokenClaims(user.Id.ToString(), user.Email, user.Role), secretKey);
+        string token = JwtHelper.GerarToken(new TokenClaims(user.Id.ToString(), user.Email, user.Role), secretKey);
         return token;
     }
 }

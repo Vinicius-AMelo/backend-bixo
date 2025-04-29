@@ -25,7 +25,7 @@ public class UserRepository(ApiContext context) : IUserRepository
 
     public UserEntity? UpdateUser(UserEntity newUser, int id)
     {
-        var oldUser = context.Set<UserEntity>().Find(id);
+        UserEntity? oldUser = context.Set<UserEntity>().Find(id);
         if (oldUser == null) return null;
         context.Entry(oldUser).CurrentValues.SetValues(newUser);
         context.SaveChanges();
@@ -34,7 +34,7 @@ public class UserRepository(ApiContext context) : IUserRepository
 
     public string? DeleteUser(int id)
     {
-        var oldUser = context.Set<UserEntity>().Find(id);
+        UserEntity? oldUser = context.Set<UserEntity>().Find(id);
         if (oldUser == null) return null;
         context.Set<UserEntity>().Remove(oldUser);
         return "User removed!";

@@ -1,7 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BichoApi.Infrastructure.JwtHelper
 {
@@ -9,16 +9,16 @@ namespace BichoApi.Infrastructure.JwtHelper
     {
         public static string GerarToken(TokenClaims user, string secretKey)
         {
-            var key = Encoding.UTF8.GetBytes(secretKey);
+            byte[] key = Encoding.UTF8.GetBytes(secretKey);
 
-            var claims = new[]
+            Claim[] claims = new[]
             {
                 new Claim("id", user.Id),
                 new Claim("email", user.Email),
                 new Claim(ClaimTypes.Role, user.Role)
             };
 
-            var tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(1),
@@ -27,19 +27,19 @@ namespace BichoApi.Infrastructure.JwtHelper
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            JwtSecurityTokenHandler tokenHandler = new();
+            SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
 
         public static TokenClaims? ValidarToken(string token)
         {
-            var key = Encoding.UTF8.GetBytes("chave_muito_grande_e_segura_de_32+_caracteres");
-            var tokenHandler = new JwtSecurityTokenHandler();
+            byte[] key = Encoding.UTF8.GetBytes("chave_muito_grande_e_segura_de_32+_caracteres");
+            JwtSecurityTokenHandler tokenHandler = new();
 
             try
             {
-                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                ClaimsPrincipal? principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
@@ -49,9 +49,9 @@ namespace BichoApi.Infrastructure.JwtHelper
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                var id = principal.FindFirst("id")?.Value;
-                var email = principal.FindFirst("email")?.Value;
-                var role = principal.FindFirst(ClaimTypes.Role)?.Value;
+                string? id = principal.FindFirst("id")?.Value;
+                string? email = principal.FindFirst("email")?.Value;
+                string? role = principal.FindFirst(ClaimTypes.Role)?.Value;
 
                 return new TokenClaims(id!, email!, role!);
             }
@@ -64,4 +64,5 @@ namespace BichoApi.Infrastructure.JwtHelper
 }
 
 public record TokenClaims(string Id, string Email, string Role);
+
 public record RepositoryClaims(int Id, string Email, string Role, string Password);

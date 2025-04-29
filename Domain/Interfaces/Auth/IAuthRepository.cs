@@ -1,5 +1,4 @@
 ﻿using BichoApi.Domain.Entities.Auth;
-using BichoApi.Presentation.DTO.Auth;
 
 namespace BichoApi.Domain.Interfaces.Auth;
 
