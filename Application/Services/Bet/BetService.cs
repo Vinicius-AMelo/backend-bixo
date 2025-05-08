@@ -1,5 +1,7 @@
 ﻿using BichoApi.Application.Hubs;
-using BichoApi.Domain.Entities.Bet;
+using BichoApi.Domain.Entities.Lottery;
+using BichoApi.Domain.Interfaces.Bet;
+using BichoApi.Domain.Interfaces.ILotteryRepository;
 using Microsoft.AspNetCore.SignalR;
 
 namespace BichoApi.Application.Services.Bet;
@@ -8,40 +10,52 @@ public class BetService : BackgroundService
 {
     private readonly IHubContext<GameHub> _hubContext;
     private readonly Random _random = new();
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public BetService(IHubContext<GameHub> hubContext)
+    public BetService(IHubContext<GameHub> hubContext, IServiceScopeFactory serviceScopeFactory)
     {
         _hubContext = hubContext;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            List<int> drawnNumbers = GenerateNumbers();
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var lotteryRepository = scope.ServiceProvider.GetRequiredService<ILotteryRepository>();
+                var betRepository = scope.ServiceProvider.GetRequiredService<IBetRepository>();
 
-            await _hubContext.Clients.All.SendAsync("Sorteio", drawnNumbers);
 
-            List<BetEntity> winners = GameHub.CurrentBets
-                .Where(bet => bet.Bet.Any(n => drawnNumbers.Contains(n)))
-                .ToList();
+                var drawnNumbers = GenerateNumbers();
+                lotteryRepository.CreateLottery(new LotteryEntity { Draw = drawnNumbers });
 
-            foreach (BetEntity winner in winners)
-                await _hubContext.Clients.Client(winner.ConnectionId)
-                    .SendAsync("Vencedor", drawnNumbers);
+                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+
+                await _hubContext.Clients.All.SendAsync("Sorteio", drawnNumbers);
+
+                var winners = GameHub.CurrentBets
+                    .Where(bet => bet.Bet.Any(n => drawnNumbers.Contains(n)))
+                    .ToList();
+
+                foreach (var winner in winners)
+                {
+                    await betRepository.WinningBet(winner.LotteryId, winner.Id);
+                    await _hubContext.Clients.Client(winner.ConnectionId)
+                        .SendAsync("Vencedor", drawnNumbers);
+                }
+            }
 
             GameHub.CurrentBets.Clear();
-
-            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
         }
     }
 
     private List<int> GenerateNumbers()
     {
-        // return new List<int> { 1, 2, 3, 4, 5 };
-        return Enumerable.Range(0, 99)
+        return Enumerable.Range(0, 9)
             .OrderBy(_ => _random.Next())
-            .Take(5)
+            .Take(6)
             .ToList();
     }
 }

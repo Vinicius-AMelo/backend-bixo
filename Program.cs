@@ -4,16 +4,20 @@ using BichoApi.Application.Services.Auth;
 using BichoApi.Application.Services.Bet;
 using BichoApi.Application.Services.User;
 using BichoApi.Domain.Interfaces.Auth;
+using BichoApi.Domain.Interfaces.Bet;
+using BichoApi.Domain.Interfaces.ILotteryRepository;
 using BichoApi.Domain.Interfaces.User;
 using BichoApi.Infrastructure.Data.Context;
 using BichoApi.Infrastructure.Repositories.Auth;
+using BichoApi.Infrastructure.Repositories.Bet;
+using BichoApi.Infrastructure.Repositories.Lottery;
 using BichoApi.Infrastructure.Repositories.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
@@ -25,8 +29,8 @@ builder.Services.AddCors(options =>
             .AllowCredentials()
             .WithExposedHeaders("Authorization"));
 });
-string? jwtKey = builder.Configuration["JWTKey"];
-byte[]? keyBytes = Encoding.UTF8.GetBytes(jwtKey!);
+var jwtKey = builder.Configuration["JWTKey"];
+var keyBytes = Encoding.UTF8.GetBytes(jwtKey!);
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -45,18 +49,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddSignalR();
-builder.Services.AddHostedService<BetService>();
+builder.Services.AddSignalR(options => { options.EnableDetailedErrors = true; });
 
 
-builder.Services.AddDbContext<ApiContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApiContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+builder.Services.AddScoped<IBetRepository, BetRepository>();
+
+builder.Services.AddScoped<ILotteryRepository, LotteryRepository>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -89,8 +97,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
-WebApplication app = builder.Build();
+// builder.Services.AddScoped<BetService>();
+builder.Services.AddHostedService<BetService>();
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
