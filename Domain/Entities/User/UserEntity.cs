@@ -10,4 +10,6 @@ public class UserEntity
     [Required] [StringLength(50)] public required string Name { get; init; }
     [Required] [StringLength(50)] public required string Email { get; init; }
     [Required] [StringLength(50)] public required string Role { get; init; }
+
+    [Required] public int Balance { get; set; } = 500;
 }

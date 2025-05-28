@@ -21,5 +21,7 @@ public class BetEntity
 
     [Required] public required bool? Winning { get; set; }
 
+    [Required] public required int Value { get; init; }
+
     public DateTime CreatedAt { get; init; }
 }

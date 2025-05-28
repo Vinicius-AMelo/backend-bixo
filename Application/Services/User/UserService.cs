@@ -14,4 +14,9 @@ public class UserService(IUserRepository userRepository) : IUserService
     {
         return await userRepository.GetUserById(id);
     }
+
+    public async Task<UserEntity?> UpdateUserBalance(int id, int value)
+    {
+        return await userRepository.UpdateUserBalance(id, value);
+    }
 }

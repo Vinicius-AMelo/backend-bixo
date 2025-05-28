@@ -6,4 +6,5 @@ public interface IUserService
 {
     public Task<IEnumerable<UserEntity>> GetAllUsers();
     public Task<UserEntity?> GetUserById(int id);
+    public Task<UserEntity?> UpdateUserBalance(int id, int value);
 }

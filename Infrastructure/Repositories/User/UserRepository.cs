@@ -22,10 +22,9 @@ public class UserRepository(ApiContext context) : IUserRepository
         return await context.Set<UserEntity>().FirstOrDefaultAsync(u => u.Email == email);
     }
 
-
     public UserEntity? UpdateUser(UserEntity newUser, int id)
     {
-        UserEntity? oldUser = context.Set<UserEntity>().Find(id);
+        var oldUser = context.Set<UserEntity>().Find(id);
         if (oldUser == null) return null;
         context.Entry(oldUser).CurrentValues.SetValues(newUser);
         context.SaveChanges();
@@ -34,9 +33,18 @@ public class UserRepository(ApiContext context) : IUserRepository
 
     public string? DeleteUser(int id)
     {
-        UserEntity? oldUser = context.Set<UserEntity>().Find(id);
+        var oldUser = context.Set<UserEntity>().Find(id);
         if (oldUser == null) return null;
         context.Set<UserEntity>().Remove(oldUser);
         return "User removed!";
+    }
+
+    public async Task<UserEntity?> UpdateUserBalance(int id, int value)
+    {
+        var user = await context.Set<UserEntity>().FindAsync(id);
+        if (user == null) return null;
+        user.Balance += value;
+        await context.SaveChangesAsync();
+        return user;
     }
 }
