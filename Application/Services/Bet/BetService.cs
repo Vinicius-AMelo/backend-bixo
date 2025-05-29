@@ -34,7 +34,7 @@ public class BetService : BackgroundService
                 var drawnNumbers = GenerateNumbers();
                 await lotteryRepository.CreateLottery(new LotteryEntity { Draw = drawnNumbers });
 
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
 
                 await _hubContext.Clients.All.SendAsync("Sorteio", drawnNumbers, stoppingToken);
 

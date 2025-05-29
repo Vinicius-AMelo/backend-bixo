@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BichoApi.Presentation.Controllers.User;
 
-[Route("api/user")]
+[Route("user")]
 [ApiController]
 public class UserController(IUserService userService) : ControllerBase
 {
@@ -19,7 +19,7 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<UserEntity?>> Get(int id)
     {
-        UserEntity? user = await userService.GetUserById(id);
+        var user = await userService.GetUserById(id);
         if (user == null) return NotFound("User not found");
         return Ok(user);
     }
