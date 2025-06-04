@@ -71,9 +71,9 @@ public class BetService : BackgroundService
 
     private List<int> GenerateNumbers()
     {
-        return Enumerable.Range(0, 99)
+        return Enumerable.Range(1, 25)
             .OrderBy(_ => _random.Next())
-            .Take(6)
+            .Take(4)
             .ToList();
     }
 
