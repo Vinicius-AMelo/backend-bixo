@@ -10,7 +10,7 @@ public class AuthService(IAuthRepository authRepository, IConfiguration config) 
 {
     public async Task<UserEntity> CreateUser(RegisterDto registerDto)
     {
-        string? passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
         UserEntity user = new() { Email = registerDto.Email, Name = registerDto.Name, Role = "user" };
         AuthEntity auth = new() { Password = passwordHash, User = user };
 
@@ -20,12 +20,15 @@ public class AuthService(IAuthRepository authRepository, IConfiguration config) 
 
     public async Task<string?> GetUserByEmail(LoginDto loginDto)
     {
-        string? secretKey = config["JWTKey"];
-        RepositoryClaims? user = await authRepository.GetUserByEmail(loginDto.Email);
+        var secretKey = config["JWTKey"];
+        var user = await authRepository.GetUserByEmail(loginDto.Email);
         if (user == null) return null;
-        bool matchPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+        var matchPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
         if (!matchPassword) return null;
-        string token = JwtHelper.GerarToken(new TokenClaims(user.Id.ToString(), user.Email, user.Role), secretKey);
+        var token = JwtHelper.GerarToken(
+            new TokenClaims(user.Id.ToString(), user.Email, user.Role, user.Balance.ToString()),
+            secretKey
+        );
         return token;
     }
 }
