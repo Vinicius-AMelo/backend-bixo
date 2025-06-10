@@ -38,12 +38,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000",
         policy => policy
-            .WithOrigins(allowedOrigins ?? Array.Empty<string>())
-            // .AllowAnyOrigin()
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials()
-            .WithExposedHeaders("Authorization")
     );
 });
 var jwtKey = builder.Configuration["JWTKey"];
