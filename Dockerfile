@@ -12,19 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["bixoApi.csproj", "."]
-RUN dotnet restore "./bixoApi.csproj"
+COPY ["BichoApi.csproj", "."]
+RUN dotnet restore "./BichoApi.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./bixoApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./BichoApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./bixoApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./BichoApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "bixoApi.dll"]
+ENTRYPOINT ["dotnet", "BichoApi.dll"]

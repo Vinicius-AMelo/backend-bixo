@@ -12,21 +12,33 @@ using BichoApi.Infrastructure.Repositories.Auth;
 using BichoApi.Infrastructure.Repositories.Bet;
 using BichoApi.Infrastructure.Repositories.Lottery;
 using BichoApi.Infrastructure.Repositories.User;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
+var host = Environment.GetEnvironmentVariable("PGHOST");
+var port = Environment.GetEnvironmentVariable("PGPORT");
+var db = Environment.GetEnvironmentVariable("PGDATABASE");
+var user = Environment.GetEnvironmentVariable("PGUSER");
+var password = Environment.GetEnvironmentVariable("PGPASSWORD");
+var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+var connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={password}";
+
+builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000",
         policy => policy
-            .WithOrigins(
-                "http://localhost:3000",
-                "https://5d08-2804-56c-a5f3-b000-9c89-d8dc-e58e-6b8c.ngrok-free.app"
-            )
+            .WithOrigins(allowedOrigins ?? Array.Empty<string>())
             // .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
