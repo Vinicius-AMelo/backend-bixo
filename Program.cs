@@ -38,9 +38,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000",
         policy => policy
-            .AllowAnyOrigin()
+            .WithOrigins("http://localhost:3000", "https://frontend-bicho-production.up.railway.app")
+            // .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
+            .AllowCredentials()
+            .WithExposedHeaders("Authorization")
     );
 });
 var jwtKey = builder.Configuration["JWTKey"];
