@@ -134,4 +134,10 @@ app.MapHub<GameHub>("/jogohub").RequireCors("AllowLocalhost3000");
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var database = scope.ServiceProvider.GetRequiredService<ApiContext>();
+    database.Database.Migrate();
+}
+
 app.Run();
